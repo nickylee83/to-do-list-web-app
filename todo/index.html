@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang= "en" ng-app= "Todo" class = "container form_style">
+<head>
+	<meta charset="UTF-8">
+	<title>To-Do Application</title>
+	<!-- bootstrap library reference -->
+	<link href = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel = "stylesheet">
+	<!-- strike-through line for finished tasks -->
+	<style>
+		.form_style{
+			width: 600px;
+			margin: 0 auto;
+		}
+		.done{text-decoration: line-through;color: #CCC;}
+	</style>
+</head>
+<body>
+	<br />
+	<h3 align = "center"><strong>My To-do Application Main Page</strong></h3>
+	<br />
+
+	<div ng-controller= "todoController" class = "panel panel-primary">
+		<div class = "panel-heading">
+			<h3 class = "panel-title" ng-style= "mainHead">My To-Do List Application</h3>
+		</div>
+		<!-- main form starts here -->
+		<div class = "panel-body">
+			<div class = "form-group">		
+				<form name= "frm" ng-submit= "addTodo()">
+					<label>Type new task here!</label>
+					<input type= "text" class = "form-control" name= "newTodo" ng-model= "newTodo" ng-style = "textBox" required />
+					<button class="btn btn-primary" ng-disabed= "frm.$invalid">Add New Task</button>
+				</form>
+
+			</div>
+			<button class="btn btn-primary" ng-click= "clearCompleted()">Clear Completed Task</button>
+			<!-- logout button -->
+			<a href="logout.php" role="button"><button type = "button" class="btn btn-success"> Logout</button></a>		
+		</div>
+		
+		
+		<!-- to-do list -->
+		<ul>
+			<!-- checkboxes will be showing in the loop -->
+			<li ng-repeat= "todo in todos">					
+				<input type= "checkbox"  ng-model= "todo.done" />
+				<!-- Mark as done -->
+				<span ng-class= "{'done':todo.done}">{{todo.title}}</span>
+			</li>
+		</ul>
+	</div>
+	<!-- angular.js reference -->
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+
+	<script>
+		angular.module('Todo',[]).
+		controller('todoController',['$scope',function($scope){
+			$scope.todos = [
+				//{'title':'Build a to-do app','done':false}
+			];
+			// add new task to the list
+			$scope.addTodo = function(){
+				$scope.todos.push({'title':$scope.newTodo,'done':false})
+				$scope.newTodo= ''
+			}
+			// clear finished tasks
+			$scope.clearCompleted = function(){
+				$scope.todos= $scope.todos.filter(function(item){
+					return !item.done
+				})
+			}
+			// main heading CSS
+			$scope.mainHead = {
+				"color" : "#FFFFFF",
+				"font-weight" : "bold",
+        		"padding" : "5px"
+			}
+			// text box CSS
+			$scope.textBox = {
+				"border-radius" : "15px",
+				"padding" : "5px",
+				"margin" : "5px"
+			}
+			// buttons CSS (not in use)
+			$scope.button = {
+				"border-radius" : "10px",
+				"padding" : "10px",
+				"margin" : "5px",
+				"background-color" : "#009900"
+			}
+
+		}])
+			
+	</script>
+</body>
+</html>
